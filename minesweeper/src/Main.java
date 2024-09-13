@@ -4,11 +4,24 @@ import java.util.Scanner;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        Minesweeper game = new Minesweeper(3, 3, 3);
-
+        String difficultyLevel;
+        int diffuclty = 0;
+        Scanner playerInput = new Scanner(System.in);
+        System.out.println("Input Difficulty level: Easy Medium Hard");
+        difficultyLevel = playerInput.next();
+        if(difficultyLevel.equals("easy")){
+            diffuclty = 5;
+        }
+        else if(difficultyLevel.equals("medium")){
+            diffuclty = 10;
+        }
+        else if(difficultyLevel.equals("hard")){
+            diffuclty = 15;
+        }
+        Minesweeper game = new Minesweeper(diffuclty,diffuclty,diffuclty);
         // Game loop
 while (!game.getGameOver()) {
-    Scanner playerInput = new Scanner(System.in);
+
             game.displayBoard();
             System.out.println("Enter x and y coordinate, and action you wish to take");
             int x = playerInput.nextInt();

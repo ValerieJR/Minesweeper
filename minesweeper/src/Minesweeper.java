@@ -26,8 +26,13 @@ public class Minesweeper {
             this.revealed = new boolean[rows][cols];
             this.gameOver = false;
             initializeBoard(); // initializes 2d array board and displayed board with a char placeholder
+            printBoard();
+            printdisplayedBoard();
             placeMines();
+            printMines();
             calculateNumbers();
+            printBoard();
+            printdisplayedBoard();
             // Call methods to initialize the board and place mines
         }
         public boolean getGameOver(){
@@ -130,50 +135,55 @@ public class Minesweeper {
             else
                 return 0;
         }
+        private int checkAroundCellForMines(int i, int j){
+            int mineTracker = 0;
+            if(i ==0 && j==cols-1){
+                mineTracker = mineTracker + countBottom(i,j) + countDiagonalRightDown(i,j) + countRight(i,j);
+                //System.out.println("Minetracker is " + mineTracker);
+            }
+            else if(i>0 && i<rows-1 && j==cols-1){
+                mineTracker = mineTracker + countRight(i,j) + countLeft(i,j) + countBottom(i,j) +countDiagonalLeftBottom(i,j) + countDiagonalRightDown(i,j);
+                //System.out.println("Minetracker is " + mineTracker);
+            }
+            else if(i==rows-1 && j==cols-1){
+                mineTracker = mineTracker + countLeft(i,j) + countDiagonalLeftBottom(i,j)+countBottom(i,j);
+                //System.out.println("Minetracker is " + mineTracker);
+            }
+            else if (i==rows-1 && j>0 && j<cols-1){
+                mineTracker =mineTracker + countBottom(i,j) + countTop(i,j) + countLeft(i,j) +countDiagonalLeftBottom(i,j) + countDiagonalLeftUp(i,j);
+                //System.out.println("Minetracker is " + mineTracker);
+            }
+            else if(i==rows-1 && j==0){
+                mineTracker = mineTracker +countTop(i,j) + countDiagonalLeftUp(i,j) + countLeft(i,j);
+                //System.out.println("Minetracker is " + mineTracker);
+            }
+            else if(i>0 && i<rows-1 && j==0){
+                mineTracker = mineTracker + countLeft(i,j) + countRight(i,j) + countTop(i,j) + countDiagonalLeftUp(i,j) +countDiagonalRightUp(i,j);
+                //System.out.println("Minetracker is " + mineTracker);
+            }
+            else if(i==0 & j==0){
+                mineTracker = mineTracker +countTop(i,j) +countRight(i,j) +countDiagonalRightUp(i,j);
+                //System.out.println("Minetracker is " + mineTracker);
+            }
+            else if(i==0 && j>0 && j<cols-1){
+                mineTracker = mineTracker + countBottom(i,j) + countTop(i,j) + countRight(i,j) + countDiagonalRightUp(i,j) +countDiagonalRightDown(i,j);
+                //System.out.println("Minetracker is " + mineTracker);
+            }
+            else{
+                mineTracker = mineTracker + countDiagonalRightDown(i,j) +countDiagonalRightUp(i,j) +countDiagonalLeftUp(i,j) +countDiagonalLeftBottom(i,j) +countLeft(i,j) +countRight(i,j)+countTop(i,j)+countBottom(i,j);
+                //System.out.println("Minetracker is " + mineTracker);
+            }
+
+            return mineTracker;
+        }
 
         private void calculateNumbers() {
             for(int i =0; i<rows; i++){
                 for(int j=0; j<cols; j++){
                     if((!mines[i][j])){
-                        int mineTracker = 0;
-                        if(i ==0 && j==cols-1){
-                            mineTracker = mineTracker + countBottom(i,j) + countDiagonalRightDown(i,j) + countRight(i,j);
-                            //System.out.println("Minetracker is " + mineTracker);
-                        }
-                        else if(i>0 && i<rows-1 && j==cols-1){
-                            mineTracker = mineTracker + countRight(i,j) + countLeft(i,j) + countBottom(i,j) +countDiagonalLeftBottom(i,j) + countDiagonalRightDown(i,j);
-                            //System.out.println("Minetracker is " + mineTracker);
-                        }
-                        else if(i==rows-1 && j==cols-1){
-                            mineTracker = mineTracker + countLeft(i,j) + countDiagonalLeftBottom(i,j)+countBottom(i,j);
-                            //System.out.println("Minetracker is " + mineTracker);
-                        }
-                        else if (i==rows-1 && j>0 && j<cols-1){
-                            mineTracker =mineTracker + countBottom(i,j) + countTop(i,j) + countLeft(i,j) +countDiagonalLeftBottom(i,j) + countDiagonalLeftUp(i,j);
-                            //System.out.println("Minetracker is " + mineTracker);
-                        }
-                        else if(i==rows-1 && j==0){
-                            mineTracker = mineTracker +countTop(i,j) + countDiagonalLeftUp(i,j) + countLeft(i,j);
-                            //System.out.println("Minetracker is " + mineTracker);
-                        }
-                        else if(i>0 && i<rows-1 && j==0){
-                            mineTracker = mineTracker + countLeft(i,j) + countRight(i,j) + countTop(i,j) + countDiagonalLeftUp(i,j) +countDiagonalRightUp(i,j);
-                            //System.out.println("Minetracker is " + mineTracker);
-                        }
-                        else if(i==0 & j==0){
-                            mineTracker = mineTracker +countTop(i,j) +countRight(i,j) +countDiagonalRightUp(i,j);
-                            //System.out.println("Minetracker is " + mineTracker);
-                        }
-                        else if(i==0 && j>0 && j<cols-1){
-                            mineTracker = mineTracker + countBottom(i,j) + countTop(i,j) + countRight(i,j) + countDiagonalRightUp(i,j) +countDiagonalRightDown(i,j);
-                            //System.out.println("Minetracker is " + mineTracker);
-                        }
-                        else{
-                            mineTracker = mineTracker + countDiagonalRightDown(i,j) +countDiagonalRightUp(i,j) +countDiagonalLeftUp(i,j) +countDiagonalLeftBottom(i,j) +countLeft(i,j) +countRight(i,j)+countTop(i,j)+countBottom(i,j);
-                            //System.out.println("Minetracker is " + mineTracker);
-                        }
-                        System.out.println("Minetracker is " + mineTracker);
-                        board[i][j] = (char) (mineTracker + '0');
+
+                        System.out.println("Minetracker is " + checkAroundCellForMines(i,j));
+                        board[i][j] = (char) (checkAroundCellForMines(i,j) + '0');
                     }
                 }
             }
@@ -190,6 +200,16 @@ public class Minesweeper {
         public void playerMove(int rows, int cols, String action) {
             if(action.equals("reveal")){
                 displayedBoard[rows][cols] = board[rows][cols];
+                if(displayedBoard[rows][cols] == '0'){
+                    checkforMoreOr(rows,cols);
+                    checkforMoreOl(rows,cols);
+                    checkforMoreOu(rows,cols);
+                    checkforMoreOb(rows,cols);
+                    checkforMoreODru(rows,cols);
+                    checkforMoreODrb(rows,cols);
+                    checkforMoreODlb(rows,cols);
+                    checkforMoreODlu(rows,cols);
+                }
                    // checkLoss(col, row);
                     //checkWin();
             }
@@ -199,6 +219,83 @@ public class Minesweeper {
 
             // TODO: Implement this method
         }
+
+    private void checkforMoreOr(int i,int j) {
+            if((!(board[i][j] == '0')) || (i == rows-1)){
+                return;
+            }
+            displayedBoard[i][j] = board[i][j];
+            i = i+1;
+            j = j;
+            checkforMoreOr(i,j);
+
+    }
+    private void checkforMoreOl(int i,int j) {
+        if((!(board[i][j] == '0')) || (i==0)){
+            return;
+        }
+        displayedBoard[i][j] = board[i][j];
+        i = i-1;
+        j = j;
+        checkforMoreOl(i,j);
+    }
+    private void checkforMoreOu(int i,int j) {
+        if((!(board[i][j] == '0')) || (j==cols-1)){
+            return;
+        }
+        displayedBoard[i][j] = board[i][j];
+        i = i;
+        j = j+1;
+        checkforMoreOu(i,j);
+    }
+    private void checkforMoreOb(int i,int j) {
+        if((!(board[i][j] == '0')) || (j==0) ){
+            return;
+        }
+        displayedBoard[i][j] = board[i][j];
+        i = i;
+        j = j-1;
+        checkforMoreOb( i, j);
+    }
+    private void checkforMoreODru(int i,int j) {
+        if((!(board[i][j] == '0')) || (j==cols-1) || (i==rows-1) ){
+            return;
+        }
+        displayedBoard[i][j] = board[i][j];
+        i = i+1;
+        j = j+1;
+        checkforMoreODru(i,j);
+    }
+    private void checkforMoreODrb(int i,int j) {
+        if((!(board[i][j] == '0')) || (i==rows-1) || (j==0) ){
+            return;
+        }
+        displayedBoard[i][j] = board[i][j];
+        i = i+1;
+        j = j-1;
+        checkforMoreODrb(i,j);
+
+    }
+    private void checkforMoreODlu(int i,int j) {
+        if((!(board[i][j] == '0')) || (i==0) || (j==cols-1) ){
+            return;
+        }
+        displayedBoard[i][j] = board[i][j];
+        i = i-1;
+        j = j+1;
+        checkforMoreODlu(i,j);
+
+    }
+    private void checkforMoreODlb(int i,int j) {
+        if((!(board[i][j] == '0')) || (i==0) || (j==0) ){
+            return;
+        }
+        displayedBoard[i][j] = board[i][j];
+        i = i-1;
+        j = j-1;
+        checkforMoreODlb(i,j);
+
+    }
 
     public boolean checkWin() {
             int currmines = 0;
@@ -220,8 +317,10 @@ public class Minesweeper {
             if (mines[rows][cols] && displayedBoard[rows][cols] == 'F'){
                 return false;
             }
-            else if (mines[rows][cols])
+            else if (mines[rows][cols]) {
+                displayedBoard[rows][cols] = 'M';
                 return true;
+            }
             else
                 return false;
     }
